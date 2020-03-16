@@ -27,7 +27,6 @@
     public class ExhaustReplacement : IJobItem
     {
         public string Type { get => Constants.JobItems.ExhaustTypeName; }
-        public WheelPosition Position { get; set; }
     }
 
     public class OilChange : IJobItem
