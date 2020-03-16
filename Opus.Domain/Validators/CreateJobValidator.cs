@@ -72,8 +72,14 @@ namespace Opus.Domain.Validators
             if (items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.NearsideFront))
                 return items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.OffsideFront);
 
+            if (items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.OffsideFront))
+                return items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.NearsideFront);
+
             if (items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.NearsideRear))
                 return items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.OffsideRear);
+
+            if (items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.OffsideRear))
+                return items.OfType<TyreReplacement>().Any(x => x.Position == WheelPosition.NearsideRear);
 
             return true;
         }
