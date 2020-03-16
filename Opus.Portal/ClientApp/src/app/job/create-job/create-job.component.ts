@@ -14,10 +14,10 @@ export class CreateJobComponent implements OnInit {
   newSheet: CreateJobRequest;
   jobSheetForm: FormGroup;
   itemForm: FormGroup;
-
+  message: string;
   wheelPositions: string[];
 
-
+  errors: string[] = [];
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService) {
     this.jobSheetForm = this.formBuilder.group({
@@ -63,12 +63,19 @@ export class CreateJobComponent implements OnInit {
   onSubmit(form: any): void {
     console.log(this.jobSheetForm.value);
 
+    this.message = null;
+    this.errors = [];
+
+    let request = this.jobSheetForm.value;
+
     this.apiService.post('/job/create', this.jobSheetForm.value).subscribe(result => {
+      this.message = "Job submission approved."
       console.log(result);
     },
-    error => {
-
-    });
+      error => {
+        console.log(error);
+        this.errors = error.errors;
+      });
   }
 
   get items(): FormArray {
@@ -93,11 +100,28 @@ export class CreateJobComponent implements OnInit {
   }
 
   generateRandomSheet(): void {
-    this.createForm(60,10)
+    this.createForm(
+      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100)
+    );
   }
 
   addRandomItem(): void {
-    this.items.push(this.createItem());
+
+    var funcs = [
+      () => { this.addTyres("Front") },
+      () => { this.addTyres("Rear") },
+      () => { this.addBrakes("OffsideRear") },
+      () => { this.addBrakes("NearsideRear") },
+      () => { this.addBrakes("OffsideFront") },
+      () => { this.addBrakes("NearsideFront") },
+      () => { this.addOilChange() },
+      () => { this.addExhaust() },
+    ]
+
+    let func = funcs[Math.floor(Math.random() * funcs.length)]
+    func()
+
   }
 
   addTyres(position: string) {
@@ -135,7 +159,7 @@ export class CreateJobComponent implements OnInit {
   addExhaust() {
     let item = this.formBuilder.group({
       $type: new FormControl('ExhaustReplacement'),
-      position: new FormControl('')
+      position: new FormControl(undefined)
     });
 
     this.items.push(item);
@@ -144,7 +168,7 @@ export class CreateJobComponent implements OnInit {
   addOilChange() {
     let item = this.formBuilder.group({
       $type: new FormControl('OilChange'),
-      position: new FormControl('')
+      position: new FormControl(undefined)
     });
 
     this.items.push(item);

@@ -40,7 +40,7 @@ namespace Opus.Portal.Converters
                     throw new Exception($"Unable to deserialize object from property name: '{fieldValue}'");
 
                 var obj = (TObject)json.ToObject(type);
-
+                 
                 return obj;
             }
             catch (Exception e)

@@ -30,7 +30,7 @@
                             <button (click)="addBrakes('OffsideRear')">Brakes</button>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
 
@@ -81,6 +81,13 @@
                 <input type="button" (click)="onSubmit(jobSheetForm.value)" value="Submit">
             </form>
 
+            <div class="alert alert-success" *ngIf="message">
+                <div>{{ message }}</div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="errors && errors.length">
+                <div *ngFor="let e of errors; let i = index;">{{e}}</div>
+            </div>
         </div>
     </div>
 

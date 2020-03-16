@@ -15,12 +15,14 @@ namespace Opus.Domain.Validators
         public const string TyreReplacementsMustBePaired = "Tyre replacements must be submitted in pairs";
         public const string MaximumOilChangeCountExceeded = "Maximum number of oil changes exceeded. Count can be no greater than: ";
         public const string BrakeDiscAndPadsMustBePaired = "Brake disc and pad replacements must be submitted in pairs";
-        
+        public const string ItemsMustNotBeEmpty = "Items must not be empty";
+
         private readonly int MaximumExhaustReplacementCount = 1;
         private readonly int MaximumOilChangeCount = 1;
         private readonly int MaximumTyreReplacementCount = 4;
 
         // TODO: 
+        // Split these validation steps into separate validators - open/close principle
         // Fail if more than 1 tyre replacement exists for a given position
         // And these...
         // private readonly int MaximumBrakeDiscReplacementCount = 4;
@@ -29,7 +31,8 @@ namespace Opus.Domain.Validators
         public CreateJobValidator()
         {
             RuleFor(x => x.Items)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(ItemsMustNotBeEmpty);
 
             RuleFor(x => x.Items)
                 .Must(NotExceedMaximumTyreReplacementCount)

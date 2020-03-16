@@ -1,3 +1,4 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,8 @@ namespace Opus.Portal
             services.AddTransient<IPricingService, PricingService>();
             services.AddTransient<IJobService, JobService>();
 
+            services.AddTransient<IValidator<CreateJobRequest>, CreateJobValidator>();
+
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 {
@@ -40,8 +43,8 @@ namespace Opus.Portal
                         .AddType<OilChange>(Constants.JobItems.OilChangeTypeName);
 
                     options.SerializerSettings.Converters.Add(jobItemConverter);
-                })
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateJobValidator>());
+                });
+                
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

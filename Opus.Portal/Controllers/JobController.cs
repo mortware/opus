@@ -41,10 +41,15 @@ namespace Opus.Portal.Controllers
         }
 
         [HttpPost("create")]
-        public CreateJobResult Create(CreateJobRequest request)
+        public IActionResult Create(CreateJobRequest request)
         {
             var result = _jobService.CreateJob(request);
-            return result;
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+            
         }
     }
 }
