@@ -36,13 +36,16 @@ namespace Opus.Portal.Converters
                 var json = JObject.Load(reader);
                 var fieldValue = GetFieldValue(json);
 
-                var obj = (TObject)json.ToObject(GetObjectTypeByFieldValue(fieldValue));
+                if (!_objectTypes.TryGetValue(fieldValue, out var type))
+                    throw new Exception($"Unable to deserialize object from property name: '{fieldValue}'");
+
+                var obj = (TObject)json.ToObject(type);
 
                 return obj;
             }
             catch (Exception e)
             {
-                throw new Exception("Unable to deserialize object from property name");
+                throw new Exception("Failed to read Json", e);
             }
         }
 
@@ -53,12 +56,6 @@ namespace Opus.Portal.Converters
 
             var fieldValue = obj[_fieldName].Value<string>();
             return fieldValue.ToLower();
-        }
-
-        private Type GetObjectTypeByFieldValue(string fieldValue)
-        {
-            _objectTypes.TryGetValue(fieldValue, out var type);
-            return type;
         }
     }
 }
