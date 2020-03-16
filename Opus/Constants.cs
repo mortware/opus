@@ -9,10 +9,10 @@ namespace Opus
         public static class JobItems
         {
             public const string TyreReplacementTypeName = "TyreReplacement";
-            public const string BrakePadReplacementTypeName = "BrakePad";
-            public const string BrakeDiscReplacementTypeName = "BrakeDisc";
+            public const string BrakePadReplacementTypeName = "BrakePadReplacement";
+            public const string BrakeDiscReplacementTypeName = "BrakeDiscReplacement";
             public const string OilChangeTypeName = "OilChange";
-            public const string ExhaustTypeName = "Exhaust";
+            public const string ExhaustTypeName = "ExhaustReplacement";
         }
         
     }
