@@ -1,47 +1,87 @@
-<div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
 
-    <button (click)="generateRandomSheet()">Create Random Sheet</button>
+            <div class="container" style="text-align: center;">
+                <div class="row">
+                    <div class="col space-between">
+                        <div>
+                            <button (click)="addBrakes('NearsideFront')">Brakes</button>
+                            <button (click)="addTyres('Front')">Tyre</button>
+                        </div>
+                        <div>
+                            <button (click)="addBrakes('OffsideFront')">Brakes</button>
+                            <button (click)="addTyres('Rear')">Tyre</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button (click)="addOilChange()">Oil Change</button>
+                        <img src="./assets/car.png" alt="" width="100">
+                        <button (click)="addExhaust()">Exhaust</button>
 
-    <form [formGroup]="jobSheetForm">
+                    </div>
+                    <div class="col space-between">
+                        <div>
+                            <button (click)="addTyres('Front')">Tyre</button>
+                            <button (click)="addBrakes('NearsideRear')">Brakes</button>
+                        </div>
+                        <div>
+                            <button (click)="addTyres('Rear')">Tyre</button>
+                            <button (click)="addBrakes('OffsideRear')">Brakes</button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
 
-        <div class="form-group">
-            <label for="referencePrice">Price</label>
-            <input type="text" class="form-control" [formControl]="jobSheetForm.controls['referencePrice']"
-                id="referencePrice">
+
+
         </div>
+        <div class="col-sm">
+            <button (click)="generateRandomSheet()">Create Random Sheet</button>
 
-        <div class="form-group">
-            <label for="referenceLabourInMinutes">Labour (Minutes)</label>
-            <input type="text" class="form-control" [formControl]="jobSheetForm.controls['referenceLabourInMinutes']"
-                id="referenceLabourInMinutes">
-        </div>
+            <form [formGroup]="jobSheetForm">
 
-        <button (click)="addRandomItem()">+ Random Item</button>
-
-        <div formArrayName="items" *ngFor="let item of items.controls; let i = index;">
-            <div [formGroupName]="i">
                 <div class="form-group">
-                    <input type="text" formControlName="$type" placeholder="$type">
-
-                    <input type="text" formControlName="position" placeholder="position">
-
-                    <button (click)="removeItem(i)">Remove</button>
+                    <label for="referencePrice">Price</label>
+                    <input type="text" class="form-control" [formControl]="jobSheetForm.controls['referencePrice']"
+                        id="referencePrice">
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label for="referenceLabourInMinutes">Labour (Minutes)</label>
+                    <input type="text" class="form-control"
+                        [formControl]="jobSheetForm.controls['referenceLabourInMinutes']" id="referenceLabourInMinutes">
+                </div>
+
+                <button (click)="addRandomItem()">+ Random Item</button>
+
+                <div formArrayName="items" *ngFor="let item of items.controls; let i = index;">
+                    <div [formGroupName]="i">
+                        <div class="form-group">
+                            <input type="text" formControlName="$type" placeholder="$type">
+
+                            <input type="text" formControlName="position" placeholder="position">
+
+                            <button (click)="removeItem(i)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+                <form [formGroup]="itemForm">
+
+                    <div class="form-group">
+                        <input type="text" formControlName="$type" placeholder="$type">
+
+                        <input type="text" formControlName="position" placeholder="position">
+
+                        <button (click)="addItem(itemForm.value)">Add</button>
+                    </div>
+                </form>
+
+                <input type="button" (click)="onSubmit(jobSheetForm.value)" value="Submit">
+            </form>
+
         </div>
-
-        <form  [formGroup]="itemForm">
-            
-            <div class="form-group">
-                <input type="text" formControlName="$type" placeholder="$type">
-
-                <input type="text" formControlName="position" placeholder="position">
-
-                <button (click)="addItem(itemForm.value)">Add</button>
-            </div>
-        </form>
-
-        <input type="button" (click)="onSubmit(jobSheetForm.value)" value="Submit">
-    </form>
+    </div>
 
 </div>

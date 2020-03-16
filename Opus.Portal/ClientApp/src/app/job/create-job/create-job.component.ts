@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CreateJobRequest, WheelPosition, IJobItem, TyreReplacement } from '../models';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { ApiService } from 'src/app/core';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-create-job',
@@ -97,5 +98,55 @@ export class CreateJobComponent implements OnInit {
 
   addRandomItem(): void {
     this.items.push(this.createItem());
+  }
+
+  addTyres(position: string) {
+    let item = this.formBuilder.group({
+      $type: new FormControl('TyreReplacement'),
+      position: new FormControl('Offside' + position)
+    });
+
+    this.items.push(item);
+
+    item = this.formBuilder.group({
+      $type: new FormControl('TyreReplacement'),
+      position: new FormControl('Nearside' + position)
+    });
+
+    this.items.push(item);
+  }
+
+  addBrakes(position: string) {
+    let item = this.formBuilder.group({
+      $type: new FormControl('BrakePadReplacement'),
+      position: new FormControl(position)
+    });
+
+    this.items.push(item);
+
+    item = this.formBuilder.group({
+      $type: new FormControl('BrakeDiscReplacement'),
+      position: new FormControl(position)
+    });
+
+    this.items.push(item);
+  }
+
+  addExhaust() {
+    let item = this.formBuilder.group({
+      $type: new FormControl('ExhaustReplacement'),
+      position: new FormControl('')
+    });
+
+    this.items.push(item);
+  }
+
+  addOilChange() {
+    let item = this.formBuilder.group({
+      $type: new FormControl('OilChange'),
+      position: new FormControl('')
+    });
+
+    this.items.push(item);
   }
 }
