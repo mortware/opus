@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using Opus.Contracts;
 using System;
 using System.Linq;
@@ -9,8 +9,12 @@ namespace Opus.Services.Tests
 {
     public class JobServiceTests
     {
+        private readonly ILabourService _labourService = Substitute.For<ILabourService>();
+        private readonly IPricingService _pricingService = Substitute.For<IPricingService>();
+        private readonly ILogger<JobService> _logger = Substitute.For<ILogger<JobService>>();
+
         [Fact]
-        public void ShouldDeclineIfTotalPriceExceeds15PercentOfReferencePrice()
+        public void CreateJob_ShouldDecline_WhenTotalPriceExceeds15PercentOfReferencePrice()
         {
             var subject = new CreateJobRequest()
             {
@@ -23,6 +27,8 @@ namespace Opus.Services.Tests
                 }
             };
 
+            _pricingService.UnitCostTyreReplacement().Returns(10);
+
             var target = CreateTarget();
             var result = target.CreateJob(subject);
 
@@ -31,7 +37,7 @@ namespace Opus.Services.Tests
         }
 
         [Fact]
-        public void ShouldReferIfTotalPriceIsBetween10And15PercentOfReferencePrice()
+        public void CreateJob_ShouldRefer_WhenTotalPriceIsBetween10And15PercentOfReferencePrice()
         {
             var subject = new CreateJobRequest()
             {
@@ -44,6 +50,8 @@ namespace Opus.Services.Tests
                 }
             };
 
+            _pricingService.UnitCostTyreReplacement().Returns(10);
+
             var target = CreateTarget();
             var result = target.CreateJob(subject);
 
@@ -53,7 +61,7 @@ namespace Opus.Services.Tests
         }
 
         [Fact]
-        public void ShouldApproveIfTotalPriceIsWithin10PercentOfReferencePrice()
+        public void CreateJob_ShouldApprove_WhenTotalPriceIsWithin10PercentOfReferencePrice()
         {
             var subject = new CreateJobRequest()
             {
@@ -66,6 +74,8 @@ namespace Opus.Services.Tests
                 }
             };
 
+            _pricingService.UnitCostTyreReplacement().Returns(10);
+
             var target = CreateTarget();
             var result = target.CreateJob(subject);
 
@@ -75,57 +85,8 @@ namespace Opus.Services.Tests
 
         private JobService CreateTarget()
         {
-            var labourServiceMock = new Mock<ILabourService>();
-            
-            labourServiceMock
-                .Setup(m => m.UnitLabourBrakeDiscReplacement())
-                .Returns(10);
-
-            labourServiceMock
-                .Setup(m => m.UnitLabourBrakePadReplacement())
-                .Returns(10);
-
-            labourServiceMock
-                .Setup(m => m.UnitLabourExhaustReplacement())
-                .Returns(10);
-
-            labourServiceMock
-                .Setup(m => m.UnitLabourOilChange())
-                .Returns(10);
-
-            labourServiceMock
-                .Setup(m => m.UnitLabourTyreReplacement())
-                .Returns(10);
-
-            var pricingServiceMock = new Mock<IPricingService>();
-
-            pricingServiceMock
-                .Setup(m => m.UnitCostBrakeDiscReplacement())
-                .Returns(10);
-
-            pricingServiceMock
-                .Setup(m => m.UnitCostBrakePadReplacement())
-                .Returns(10);
-
-            pricingServiceMock
-                .Setup(m => m.UnitCostExhaustReplacement())
-                .Returns(10);
-
-            pricingServiceMock
-                .Setup(m => m.UnitCostOilChange())
-                .Returns(10);
-
-            pricingServiceMock
-                .Setup(m => m.UnitCostTyreReplacement())
-                .Returns(10);
-
-            var jobService = new JobService(
-                new Mock<ILogger<JobService>>().Object,
-                pricingServiceMock.Object,
-                labourServiceMock.Object);
-
+            var jobService = new JobService(_logger, _pricingService, _labourService);
             return jobService;
-
         }
     }
 }
