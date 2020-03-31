@@ -1,7 +1,6 @@
 using Opus.Contracts;
 using Opus.Domain.Validators;
 using Xunit;
-using FluentValidation;
 using FluentValidation.TestHelper;
 using System.Collections.Generic;
 using System.Linq;

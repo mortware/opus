@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Opus.Contracts;
-using System;
 using System.Linq;
 using Xunit;
 
